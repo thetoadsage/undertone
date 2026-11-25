@@ -1,0 +1,20 @@
+{
+  "undertone": 1,
+  "id": "listenbrainz-playlists",
+  "name": "ListenBrainz playlists",
+  "version": "1.0.0",
+  "description": "Reads public ListenBrainz playlist links so you can import them.",
+  "playlists": [
+    {
+      "match": "listenbrainz\\.org/playlist/([0-9a-fA-F-]{36})",
+      "request": {
+        "url": "https://api.listenbrainz.org/1/playlist/{{m1}}"
+      },
+      "name": "playlist.title",
+      "items": "playlist.track",
+      "title": "title",
+      "artist": "creator",
+      "album": "album"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "undertone": 1,
+  "id": "subsonic",
+  "name": "Navidrome / Subsonic",
+  "version": "1.0.0",
+  "description": "Plays from your own music server: Navidrome, Gonic, Airsonic or anything else that speaks the Subsonic API.",
+  "settings": [
+    {
+      "key": "server",
+      "type": "text",
+      "label": "Server address",
+      "help": "For example https://music.example.com",
+      "required": true
+    },
+    {
+      "key": "username",
+      "type": "text",
+      "label": "Username",
+      "required": true
+    },
+    {
+      "key": "password",
+      "type": "password",
+      "label": "Password",
+      "required": true
+    }
+  ],
+  "fail": [
+    {
+      "path": "subsonic-response.status",
+      "equals": "failed"
+    }
+  ],
+  "message": "subsonic-response.error.message",
+  "check": {
+    "url": "{{&settings.server}}/rest/ping?u={{settings.username}}&p=enc:{{hex settings.password}}&v=1.16.1&c=undertone&f=json"
+  },
+  "tracks": [
+    {
+      "request": {
+        "url": "{{&settings.server}}/rest/search3?u={{settings.username}}&p=enc:{{hex settings.password}}&v=1.16.1&c=undertone&f=json&query={{title}}&songCount=40&albumCount=0&artistCount=0"
+      },
+      "items": "subsonic-response.searchResult3.song",
+      "id": "id",
+      "title": "title",
+      "artist": "artist",
+      "album": "album",
+      "ext": "suffix",
+      "link": {
+        "url": "{{&settings.server}}/rest/stream?u={{settings.username}}&p=enc:{{hex settings.password}}&v=1.16.1&c=undertone&id={{id}}&format=raw"
+      }
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "undertone": 1,
+  "id": "deezer-catalog",
+  "name": "Deezer catalog",
+  "version": "1.0.0",
+  "description": "Search, artists, albums, tracks, charts and artwork from Deezer's public catalog. No account needed.",
+  "catalog": {
+    "artist": {
+      "id": "id",
+      "name": "name",
+      "image": [
+        "picture_xl",
+        "picture_big"
+      ],
+      "albumCount": "nb_album"
+    },
+    "album": {
+      "id": "id",
+      "title": "title",
+      "artistId": "artist.id",
+      "artistName": "artist.name",
+      "image": [
+        "cover_xl",
+        "cover_big",
+        "cover_medium"
+      ],
+      "date": "release_date",
+      "trackCount": "nb_tracks",
+      "duration": "duration",
+      "type": "record_type",
+      "upc": "upc",
+      "genres": "genres.data"
+    },
+    "track": {
+      "id": "id",
+      "title": "title",
+      "artistId": "artist.id",
+      "artistName": "artist.name",
+      "artists": "contributors",
+      "albumId": "album.id",
+      "albumTitle": "album.title",
+      "image": [
+        "album.cover_xl",
+        "album.cover_big",
+        "album.cover_medium"
+      ],
+      "duration": "duration",
+      "isrc": "isrc",
+      "trackNo": "track_position",
+      "discNo": "disk_number",
+      "date": [
+        "release_date",
+        "album.release_date"
+      ],
+      "explicit": "explicit_lyrics"
+    },
+    "genre": {
+      "id": "id",
+      "name": "name",
+      "image": [
+        "picture_xl",
+        "picture_big"
+      ]
+    },
+    "noImage": "/images/(artist|cover)//\\d+x",
+    "imageSize": {
+      "match": "/\\d+x\\d+-",
+      "replace": "/{{size}}x{{size}}-",
+      "sizes": [
+        250,
+        500,
+        1000
+      ]
+    },
+    "notFound": [
+      {
+        "path": "error.code",
+        "match": "^(800|803)$"
+      }
+    ],
+    "retry": [
+      {
+        "path": "error.code",
+        "equals": 4
+      }
+    ],
+    "routes": {
+      "searchArtists": {
+        "request": {
+          "url": "https://api.deezer.com/search/artist?q={{query}}&limit={{limit}}&index={{offset}}"
+        },
+        "items": "data",
+        "total": "total"
+      },
+      "searchAlbums": {
+        "request": {
+          "url": "https://api.deezer.com/search/album?q={{query}}&limit={{limit}}&index={{offset}}"
+        },
+        "items": "data",
+        "total": "total"
+      },
+      "searchTracks": {
+        "request": {
+          "url": "https://api.deezer.com/search/track?q={{query}}&limit={{limit}}&index={{offset}}"
+        },
+        "items": "data",
+        "total": "total"
+      },
+      "findTrack": {
+        "request": {
+          "url": "https://api.deezer.com/search/track?q=artist%3A%22{{artist}}%22%20track%3A%22{{title}}%22&limit={{limit}}"
+        },
+        "items": "data"
+      },
+      "artist": {
+        "request": {
+          "url": "https://api.deezer.com/artist/{{id}}"
+        }
+      },
+      "artistAlbums": {
+        "request": {
+          "url": "https://api.deezer.com/artist/{{id}}/albums?limit={{limit}}&index={{offset}}"
+        },
+        "items": "data",
+        "total": "total"
+      },
+      "artistTopTracks": {
+        "request": {
+          "url": "https://api.deezer.com/artist/{{id}}/top?limit={{limit}}"
+        },
+        "items": "data"
+      },
+      "similarArtists": {
+        "request": {
+          "url": "https://api.deezer.com/artist/{{id}}/related?limit={{limit}}"
+        },
+        "items": "data"
+      },
+      "artistRadio": {
+        "request": {
+          "url": "https://api.deezer.com/artist/{{id}}/radio?limit={{limit}}"
+        },
+        "items": "data",
+        "hours": 1
+      },
+      "album": {
+        "request": {
+          "url": "https://api.deezer.com/album/{{id}}"
+        },
+        "items": "tracks.data"
+      },
+      "albumTracks": {
+        "request": {
+          "url": "https://api.deezer.com/album/{{id}}/tracks?limit={{limit}}"
+        },
+        "items": "data"
+      },
+      "track": {
+        "request": {
+          "url": "https://api.deezer.com/track/{{id}}"
+        }
+      },
+      "chartAlbums": {
+        "request": {
+          "url": "https://api.deezer.com/chart/{{genre}}/albums?limit={{limit}}&index={{offset}}"
+        },
+        "items": "data",
+        "total": "total",
+        "defaults": {
+          "genre": "0"
+        }
+      },
+      "chartArtists": {
+        "request": {
+          "url": "https://api.deezer.com/chart/{{genre}}/artists?limit={{limit}}&index={{offset}}"
+        },
+        "items": "data",
+        "total": "total",
+        "defaults": {
+          "genre": "0"
+        }
+      },
+      "chartTracks": {
+        "request": {
+          "url": "https://api.deezer.com/chart/{{genre}}/tracks?limit={{limit}}&index={{offset}}"
+        },
+        "items": "data",
+        "total": "total",
+        "defaults": {
+          "genre": "0"
+        }
+      },
+      "newReleases": {
+        "request": {
+          "url": "https://api.deezer.com/editorial/0/releases?limit={{limit}}"
+        },
+        "items": "data"
+      },
+      "genres": {
+        "request": {
+          "url": "https://api.deezer.com/genre"
+        },
+        "items": "data",
+        "skip": [
+          {
+            "path": "id",
+            "equals": 0
+          }
+        ]
+      }
+    }
+  }
+}

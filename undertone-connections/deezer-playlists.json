@@ -1,0 +1,22 @@
+{
+  "undertone": 1,
+  "id": "deezer-playlists",
+  "name": "Deezer playlists",
+  "version": "1.0.0",
+  "description": "Reads public Deezer playlist links so you can import them.",
+  "playlists": [
+    {
+      "match": "deezer\\.com/(?:[a-z]{2}/)?playlist/(\\d+)",
+      "request": {
+        "url": "https://api.deezer.com/playlist/{{m1}}"
+      },
+      "name": "title",
+      "items": "tracks.data",
+      "next": "tracks.next",
+      "title": "title",
+      "artist": "artist.name",
+      "album": "album.title",
+      "isrc": "isrc"
+    }
+  ]
+}

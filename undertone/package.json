@@ -1,0 +1,23 @@
+{
+  "name": "undertone",
+  "version": "0.2.0",
+  "description": "A neutral music server for Jellyfin apps. Everything it does comes from connection files.",
+  "scripts": {
+    "build": "esbuild src/server.ts --bundle --platform=node --target=node22 --format=esm --loader:.woff2=binary --external:node:* --outfile=dist/server.mjs --log-level=warning",
+    "start": "node dist/server.mjs",
+    "local": "./start-local.sh",
+    "typecheck": "tsc -p .",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.0",
+    "prettier": "^3.10.1",
+    "typescript": "^7.0.2"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  }
+}

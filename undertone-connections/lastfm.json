@@ -1,0 +1,100 @@
+{
+  "undertone": 1,
+  "id": "lastfm",
+  "name": "Last.fm",
+  "version": "1.0.0",
+  "description": "Scrobbles what you play to your Last.fm profile.",
+  "settings": [
+    {
+      "key": "apiKey",
+      "type": "password",
+      "label": "API key",
+      "help": "Create one at last.fm/api/account/create. It takes a minute and is free.",
+      "required": true
+    },
+    {
+      "key": "secret",
+      "type": "password",
+      "label": "Shared secret",
+      "help": "Shown next to the API key.",
+      "required": true
+    },
+    {
+      "key": "username",
+      "type": "text",
+      "label": "Last.fm username",
+      "required": true
+    },
+    {
+      "key": "password",
+      "type": "password",
+      "label": "Last.fm password",
+      "help": "Used once to get a session key from Last.fm.",
+      "required": true
+    }
+  ],
+  "fail": [
+    {
+      "path": "error",
+      "match": "."
+    }
+  ],
+  "session": {
+    "request": {
+      "method": "POST",
+      "url": "https://ws.audioscrobbler.com/2.0/",
+      "urlencoded": {
+        "method": "auth.getMobileSession",
+        "api_key": "{{settings.apiKey}}",
+        "username": "{{settings.username}}",
+        "password": "{{settings.password}}",
+        "format": "json"
+      },
+      "sign": {
+        "into": "api_sig",
+        "secret": "{{settings.secret}}"
+      }
+    },
+    "path": "session.key",
+    "days": 90
+  },
+  "track": {
+    "nowPlaying": {
+      "method": "POST",
+      "url": "https://ws.audioscrobbler.com/2.0/",
+      "urlencoded": {
+        "method": "track.updateNowPlaying",
+        "api_key": "{{settings.apiKey}}",
+        "sk": "{{session}}",
+        "artist": "{{track.artist}}",
+        "track": "{{track.title}}",
+        "album": "{{track.album}}",
+        "duration": "{{track.duration}}",
+        "format": "json"
+      },
+      "sign": {
+        "into": "api_sig",
+        "secret": "{{settings.secret}}"
+      }
+    },
+    "played": {
+      "method": "POST",
+      "url": "https://ws.audioscrobbler.com/2.0/",
+      "urlencoded": {
+        "method": "track.scrobble",
+        "api_key": "{{settings.apiKey}}",
+        "sk": "{{session}}",
+        "artist": "{{track.artist}}",
+        "track": "{{track.title}}",
+        "album": "{{track.album}}",
+        "duration": "{{track.duration}}",
+        "timestamp": "{{timestamp}}",
+        "format": "json"
+      },
+      "sign": {
+        "into": "api_sig",
+        "secret": "{{settings.secret}}"
+      }
+    }
+  }
+}

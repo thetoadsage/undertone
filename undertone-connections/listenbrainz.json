@@ -1,0 +1,18 @@
+{
+  "undertone": 1,
+  "id": "listenbrainz",
+  "name": "ListenBrainz",
+  "version": "1.0.0",
+  "description": "Sends what you play to your ListenBrainz listening history.",
+  "settings": [
+    { "key": "token", "type": "password", "label": "ListenBrainz user token", "help": "listenbrainz.org → Settings → User token.", "required": true }
+  ],
+  "check": { "url": "https://api.listenbrainz.org/1/validate-token", "headers": { "authorization": "Token {{settings.token}}" } },
+  "fail": [{ "path": "valid", "equals": false }],
+  "track": {
+    "nowPlaying": { "method": "POST", "url": "https://api.listenbrainz.org/1/submit-listens", "headers": { "authorization": "Token {{settings.token}}" },
+      "json": { "listen_type": "playing_now", "payload": [{ "track_metadata": { "artist_name": "{{track.artist}}", "track_name": "{{track.title}}", "release_name": "{{track.album}}", "additional_info": { "isrc": "{{track.isrc}}", "media_player": "Undertone", "submission_client": "Undertone" } } }] } },
+    "played": { "method": "POST", "url": "https://api.listenbrainz.org/1/submit-listens", "headers": { "authorization": "Token {{settings.token}}" },
+      "json": { "listen_type": "single", "payload": [{ "listened_at": "{{#timestamp}}", "track_metadata": { "artist_name": "{{track.artist}}", "track_name": "{{track.title}}", "release_name": "{{track.album}}", "additional_info": { "isrc": "{{track.isrc}}", "media_player": "Undertone", "submission_client": "Undertone" } } }] } }
+  }
+}

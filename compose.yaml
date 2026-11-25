@@ -1,0 +1,18 @@
+services:
+  undertone:
+    build: ./undertone
+    image: undertone
+    container_name: undertone
+    restart: unless-stopped
+    ports:
+      - "${UNDERTONE_BIND_IP:-127.0.0.1}:8787:8787"
+    volumes:
+      - undertone-data:/data
+      - ./undertone-connections:/app/connections:ro
+    environment:
+      SERVER_NAME: Undertone
+      CATALOG: http://127.0.0.1:8787/connections/deezer-catalog.json
+      CONNECTIONS_INDEX: http://127.0.0.1:8787/connections/index.json
+
+volumes:
+  undertone-data:

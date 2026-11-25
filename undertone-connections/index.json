@@ -1,0 +1,108 @@
+{
+  "connections": [
+    {
+      "file": "deezer-catalog.json",
+      "name": "Deezer catalog",
+      "description": "Search, artists, albums, tracks, charts and artwork from Deezer's public catalog. No account needed.",
+      "does": [
+        "catalog"
+      ]
+    },
+    {
+      "file": "torbox.json",
+      "name": "TorBox",
+      "description": "Plays music from your TorBox account and from releases already cached on TorBox.",
+      "does": [
+        "audio"
+      ]
+    },
+    {
+      "file": "subsonic.json",
+      "name": "Navidrome / Subsonic",
+      "description": "Plays from your own music server: Navidrome, Gonic, Airsonic or anything else that speaks the Subsonic API.",
+      "does": [
+        "audio"
+      ]
+    },
+    {
+      "file": "lrclib.json",
+      "name": "LRCLIB lyrics",
+      "description": "Synced and plain lyrics from LRCLIB, a free community database. No account needed.",
+      "does": [
+        "lyrics"
+      ]
+    },
+    {
+      "file": "spotify-playlists.json",
+      "name": "Spotify playlists",
+      "description": "Reads public Spotify playlist links so you can import them. Up to the first 100 songs of a playlist.",
+      "does": [
+        "playlists"
+      ]
+    },
+    {
+      "file": "apple-music-playlists.json",
+      "name": "Apple Music playlists",
+      "description": "Reads public Apple Music playlist links so you can import them. Up to the songs shown on the playlist's web page.",
+      "does": [
+        "playlists"
+      ]
+    },
+    {
+      "file": "deezer-playlists.json",
+      "name": "Deezer playlists",
+      "description": "Reads public Deezer playlist links so you can import them.",
+      "does": [
+        "playlists"
+      ]
+    },
+    {
+      "file": "listenbrainz-playlists.json",
+      "name": "ListenBrainz playlists",
+      "description": "Reads public ListenBrainz playlist links so you can import them.",
+      "does": [
+        "playlists"
+      ]
+    },
+    {
+      "file": "lastfm.json",
+      "name": "Last.fm",
+      "description": "Scrobbles what you play to your Last.fm profile.",
+      "does": [
+        "history"
+      ]
+    },
+    {
+      "file": "listenbrainz.json",
+      "name": "ListenBrainz",
+      "description": "Sends what you play to your ListenBrainz listening history.",
+      "does": [
+        "history"
+      ]
+    },
+    {
+      "file": "discord.json",
+      "name": "Discord",
+      "description": "Posts what you are listening to in a Discord channel.",
+      "does": [
+        "history"
+      ]
+    },
+    {
+      "file": "ntfy.json",
+      "name": "ntfy notifications",
+      "description": "Sends a push notification to your phone when a song starts, through ntfy.",
+      "does": [
+        "history"
+      ]
+    },
+    {
+      "file": "webhook.json",
+      "name": "Webhook",
+      "description": "Posts every play to an address of yours as JSON, for Home Assistant, n8n, Zapier or your own scripts.",
+      "does": [
+        "history"
+      ]
+    }
+  ]
+}

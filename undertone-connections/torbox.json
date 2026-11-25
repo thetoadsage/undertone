@@ -1,0 +1,259 @@
+{
+  "undertone": 1,
+  "id": "torbox",
+  "name": "TorBox",
+  "version": "1.1.0",
+  "description": "Plays music from your TorBox account and from releases already cached on TorBox.",
+  "settings": [
+    {
+      "key": "apiKey",
+      "type": "password",
+      "label": "TorBox API key",
+      "help": "TorBox → Settings → API key.",
+      "required": true
+    },
+    {
+      "key": "search",
+      "type": "toggle",
+      "label": "Search beyond my library",
+      "help": "Off: only files already in your account. On: also releases that are already cached on TorBox; they are added to your account when you play them.",
+      "default": true
+    },
+    {
+      "key": "cachedOnly",
+      "type": "toggle",
+      "label": "Only play what is already cached",
+      "help": "On: nothing is ever downloaded for you. Off: when a song isn't cached anywhere, TorBox is asked to fetch the matching release on its own servers, so it plays next time.",
+      "default": true
+    },
+    {
+      "key": "quality",
+      "type": "select",
+      "label": "Preferred quality",
+      "default": "lossless",
+      "options": [
+        {
+          "value": "lossless",
+          "label": "Lossless (FLAC) first"
+        },
+        {
+          "value": "any",
+          "label": "No preference"
+        },
+        {
+          "value": "small",
+          "label": "Smaller files (MP3/AAC) first"
+        }
+      ]
+    }
+  ],
+  "fail": [
+    {
+      "path": "success",
+      "equals": false
+    }
+  ],
+  "check": {
+    "url": "https://api.torbox.app/v1/api/user/me",
+    "headers": {
+      "authorization": "Bearer {{settings.apiKey}}"
+    }
+  },
+  "library": [
+    {
+      "kind": "torrents",
+      "request": {
+        "url": "https://api.torbox.app/v1/api/torrents/mylist?bypass_cache=true&limit={{limit}}&offset={{offset}}",
+        "headers": {
+          "authorization": "Bearer {{settings.apiKey}}"
+        }
+      },
+      "one": {
+        "url": "https://api.torbox.app/v1/api/torrents/mylist?bypass_cache=true&id={{id}}",
+        "headers": {
+          "authorization": "Bearer {{settings.apiKey}}"
+        }
+      },
+      "page": {
+        "size": 1000,
+        "max": 5
+      },
+      "items": "data",
+      "ready": [
+        {
+          "path": "download_present",
+          "equals": true
+        },
+        {
+          "path": "download_state",
+          "notMatch": "missing|expired|error|failed"
+        }
+      ],
+      "id": "id",
+      "name": "name",
+      "hash": "hash",
+      "files": "files",
+      "file": {
+        "id": "id",
+        "path": "name",
+        "alt": "short_name",
+        "size": "size"
+      },
+      "link": {
+        "request": {
+          "url": "https://api.torbox.app/v1/api/torrents/requestdl?token={{settings.apiKey}}&torrent_id={{id}}&file_id={{fileId}}&zip_link=false",
+          "headers": {
+            "authorization": "Bearer {{settings.apiKey}}"
+          }
+        },
+        "url": "data"
+      }
+    },
+    {
+      "kind": "usenet",
+      "optional": true,
+      "request": {
+        "url": "https://api.torbox.app/v1/api/usenet/mylist?bypass_cache=true&limit={{limit}}&offset={{offset}}",
+        "headers": {
+          "authorization": "Bearer {{settings.apiKey}}"
+        }
+      },
+      "page": {
+        "size": 1000,
+        "max": 2
+      },
+      "items": "data",
+      "ready": [
+        {
+          "path": "download_present",
+          "equals": true
+        },
+        {
+          "path": "download_state",
+          "notMatch": "missing|expired|error|failed"
+        }
+      ],
+      "id": "id",
+      "name": "name",
+      "files": "files",
+      "file": {
+        "id": "id",
+        "path": "name",
+        "alt": "short_name",
+        "size": "size"
+      },
+      "link": {
+        "request": {
+          "url": "https://api.torbox.app/v1/api/usenet/requestdl?token={{settings.apiKey}}&usenet_id={{id}}&file_id={{fileId}}&zip_link=false",
+          "headers": {
+            "authorization": "Bearer {{settings.apiKey}}"
+          }
+        },
+        "url": "data"
+      }
+    },
+    {
+      "kind": "webdl",
+      "optional": true,
+      "request": {
+        "url": "https://api.torbox.app/v1/api/webdl/mylist?bypass_cache=true&limit={{limit}}&offset={{offset}}",
+        "headers": {
+          "authorization": "Bearer {{settings.apiKey}}"
+        }
+      },
+      "page": {
+        "size": 1000,
+        "max": 2
+      },
+      "items": "data",
+      "ready": [
+        {
+          "path": "download_present",
+          "equals": true
+        },
+        {
+          "path": "download_state",
+          "notMatch": "missing|expired|error|failed"
+        }
+      ],
+      "id": "id",
+      "name": "name",
+      "files": "files",
+      "file": {
+        "id": "id",
+        "path": "name",
+        "alt": "short_name",
+        "size": "size"
+      },
+      "link": {
+        "request": {
+          "url": "https://api.torbox.app/v1/api/webdl/requestdl?token={{settings.apiKey}}&web_id={{id}}&file_id={{fileId}}&zip_link=false",
+          "headers": {
+            "authorization": "Bearer {{settings.apiKey}}"
+          }
+        },
+        "url": "data"
+      }
+    }
+  ],
+  "find": [
+    {
+      "when": "search",
+      "request": {
+        "method": "POST",
+        "url": "https://api.knaben.org/v1",
+        "json": {
+          "query": "{{query}}",
+          "search_field": "title",
+          "categories": [
+            1000000
+          ],
+          "order_by": "seeders",
+          "order_direction": "desc",
+          "size": 50,
+          "hide_unsafe": true,
+          "hide_xxx": true
+        }
+      },
+      "items": "hits",
+      "hash": "hash",
+      "title": "title"
+    }
+  ],
+  "cached": {
+    "request": {
+      "url": "https://api.torbox.app/v1/api/torrents/checkcached?hash={{&hashes}}&format=list&list_files=true",
+      "headers": {
+        "authorization": "Bearer {{settings.apiKey}}"
+      }
+    },
+    "items": "data",
+    "hash": "hash",
+    "name": "name",
+    "files": "files",
+    "file": {
+      "path": "name",
+      "size": "size"
+    },
+    "max": 40
+  },
+  "attach": {
+    "kind": "torrents",
+    "request": {
+      "method": "POST",
+      "url": "https://api.torbox.app/v1/api/torrents/createtorrent",
+      "headers": {
+        "authorization": "Bearer {{settings.apiKey}}"
+      },
+      "form": {
+        "magnet": "magnet:?xt=urn:btih:{{hash}}",
+        "seed": "3",
+        "allow_zip": "false"
+      }
+    },
+    "id": "data.torrent_id"
+  },
+  "uncached": {
+    "unless": "cachedOnly"
+  }
+}

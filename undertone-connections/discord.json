@@ -1,0 +1,28 @@
+{
+  "undertone": 1,
+  "id": "discord",
+  "name": "Discord",
+  "version": "1.0.0",
+  "description": "Posts what you are listening to in a Discord channel.",
+  "settings": [
+    {
+      "key": "webhook",
+      "type": "password",
+      "label": "Channel webhook address",
+      "help": "Discord → channel settings → Integrations → Webhooks → Copy webhook URL.",
+      "required": true
+    }
+  ],
+  "track": {
+    "nowPlaying": {
+      "method": "POST",
+      "url": "{{&settings.webhook}}",
+      "json": {
+        "content": "**{{track.title}}**\n{{track.artist}} · {{track.album}}",
+        "allowed_mentions": {
+          "parse": []
+        }
+      }
+    }
+  }
+}

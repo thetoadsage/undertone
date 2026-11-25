@@ -1,0 +1,44 @@
+{
+  "undertone": 1,
+  "id": "webhook",
+  "name": "Webhook",
+  "version": "1.0.0",
+  "description": "Posts every play to an address of yours as JSON, for Home Assistant, n8n, Zapier or your own scripts.",
+  "settings": [
+    {
+      "key": "url",
+      "type": "text",
+      "label": "Address",
+      "help": "Receives a POST when a song starts and when it has been played.",
+      "required": true
+    }
+  ],
+  "track": {
+    "nowPlaying": {
+      "method": "POST",
+      "url": "{{&settings.url}}",
+      "json": {
+        "event": "started",
+        "title": "{{track.title}}",
+        "artist": "{{track.artist}}",
+        "album": "{{track.album}}",
+        "isrc": "{{track.isrc}}",
+        "duration": "{{#track.duration}}",
+        "at": "{{#timestamp}}"
+      }
+    },
+    "played": {
+      "method": "POST",
+      "url": "{{&settings.url}}",
+      "json": {
+        "event": "played",
+        "title": "{{track.title}}",
+        "artist": "{{track.artist}}",
+        "album": "{{track.album}}",
+        "isrc": "{{track.isrc}}",
+        "duration": "{{#track.duration}}",
+        "at": "{{#timestamp}}"
+      }
+    }
+  }
+}

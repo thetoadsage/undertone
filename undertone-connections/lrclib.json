@@ -1,0 +1,35 @@
+{
+  "undertone": 1,
+  "id": "lrclib",
+  "name": "LRCLIB lyrics",
+  "version": "1.0.0",
+  "description": "Synced and plain lyrics from LRCLIB, a free community database. No account needed.",
+  "lyrics": {
+    "request": {
+      "url": "https://lrclib.net/api/get?track_name={{title}}&artist_name={{artist}}&album_name={{album}}&duration={{duration}}",
+      "headers": {
+        "lrclib-client": "Undertone"
+      }
+    },
+    "synced": "syncedLyrics",
+    "plain": "plainLyrics",
+    "skip": [
+      {
+        "path": "instrumental",
+        "equals": true
+      }
+    ],
+    "search": {
+      "request": {
+        "url": "https://lrclib.net/api/search?track_name={{title}}&artist_name={{artist}}",
+        "headers": {
+          "lrclib-client": "Undertone"
+        }
+      },
+      "items": "",
+      "title": "trackName",
+      "artist": "artistName",
+      "duration": "duration"
+    }
+  }
+}
